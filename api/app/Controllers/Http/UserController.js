@@ -160,7 +160,7 @@ class UserController {
 
     } catch (error) {
       console.log(error)
-      return response.status(400).send({ error: 'An error occurred. Please try again later.' });
+      return response.status(400).send({ error: 'An error occurred. Please try again later.', error });
     }
   }
 
