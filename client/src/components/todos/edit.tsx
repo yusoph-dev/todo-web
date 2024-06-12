@@ -87,7 +87,7 @@ const formItemLayout2 = {
 
 const EditTodo = () => {
   const [initLoading, setInitLoading] = useState(true);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [isActive, setIsActive] = useState<boolean>(false);
   const { id } = useParams();
 
@@ -98,8 +98,12 @@ const EditTodo = () => {
   const [openManageReportsTo, setOpenManagerReportsTo] = useState(false);
   const [confirmLoadingManager, setConfirmLoadingManager] = useState(false);
 
+  useEffect(() => {
+    document.title = 'Edit Todo';
+    loadTodo()
+  }, []);
+
   const loadTodo = () => {
-    
     setLoading(true);
     return http
       .get(`${apiRoutes.todo}${id}`)
@@ -112,7 +116,6 @@ const EditTodo = () => {
         handleErrorResponse(error);
       });
   };
-
 
 
   const handleSubmit = (values: any) => {
@@ -170,7 +173,10 @@ const EditTodo = () => {
                     variant="filled" 
                     style={{ maxWidth: 1200, width: '100%' }} 
                     onFinish={handleSubmit}
-                    initialValues={todo ? todo : []}
+                    initialValues={{
+                      todo: todo?.todo,
+                      description: todo?.description
+                    }}
                     >
 
                     <Form.Item
@@ -185,7 +191,7 @@ const EditTodo = () => {
                     <Form.Item
                       label="Description"
                       name="description"
-                      rules={[{ required: true, message: 'Please input!' }]}
+                      rules={[{ required: true, message: 'Please input description' }]}
                     >
                       <Input.TextArea/>
                     </Form.Item>

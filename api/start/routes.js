@@ -24,18 +24,6 @@ Route.group(() => {
   Route.put('todo/update/:id', 'TodoController.update')
   Route.post('todo/create', 'TodoController.create')
   Route.delete('todo/:id', 'TodoController.delete')
-
-  Route.get('users', 'UserController.users')
-  Route.get('user/:id', 'UserController.show')
-  Route.post('user', 'UserController.create')
-  Route.post('user/update-image/:id', 'UserController.updateImage')
-  Route.put('user/update-active/:id', 'UserController.updateActive')
-  Route.put('user/update/:id', 'UserController.update')
-  Route.post('user/create', 'UserController.create')
-  Route.delete('user/:id', 'UserController.delete')
-  Route.get('defaults', 'UserController.defaults')
-  Route.post('manager-reports-to-users', 'UserController.managerUsers')
-  Route.post('set-manager-reports-to', 'UserController.setManagerUser')
   
 }).middleware(['auth', 'checkUserRole:admin,hr']).prefix('v1') // Here, checkUserRole should be able to handle checking multiple roles
 

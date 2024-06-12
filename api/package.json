@@ -5,7 +5,7 @@
   "description": "Adonisjs boilerplate for API server with pre-configured JWT",
   "main": "index.js",
   "scripts": {
-    "start": "node ace migration:run && node ace seed && node server.js",
+    "start": "node server.js",
     "test": "node ace test",
     "adonis:seed:make": "node ace seed"
   },
@@ -34,8 +34,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
     "mysql2": "^2.3.3",
-    "passport": "^0.7.0",
-    "pg": "^8.12.0"
+    "passport": "^0.7.0"
   },
   "autoload": {
     "App": "./app"

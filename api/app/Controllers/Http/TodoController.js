@@ -101,78 +101,23 @@ class TodoController {
     }
   }
 
-  async show({ response, params }) {
+  async show({ response, params , auth}) {
+
+    if (auth) {
+      // Fetch todo details
+      const todo = await Database
+        .select('id', 'todo', 'description')
+        .from('todos')
+        .where('id', params.id)
+        .first();
     
-    // Fetch todo details
-    const todo = await Database
-      .select('id', 'todoname', 'first_name', 'middle_name', 'last_name', 'role_name', 'assigned_branch', 'role', 'email', 'job_description', 'file_name', 'is_active')
-      .from('todos')
-      .where('is_deleted', 0)
-      .where('id', params.id)
-      .first();
-  
-    if (todo) {
-      // Fetch todo profile image
-      if (todo.file_name) {
-        todo.file_name = todo.file_name != null ? blobService.getUrl('images', todo.file_name) : todo.file_name;
+      if (todo) {
+
+        return response.status(200).send({
+          message: 'Todo data successfully fetched!',
+          data: { todo, },
+        });
       }
-
-      // Fetch manager data for whom this todo reports to (manager_to)
-      const managerTo = await Database
-        .select('manager_todo_id', 'todo_id')
-        .from('manager_todos')
-        .where('manager_todo_id', todo.id);
-  
-      // Prepare an empty array to store manager data
-      let manager_to = [];
-  
-      // Loop through each manager record and potentially enrich data (e.g., fetch full todo details)
-      for (let i = 0; i < managerTo.length; i++) {
-        // Assuming `todo_id` in `manager_todos` references the `todos` table
-        let managerDetails = await Database.select('id', 'todoname', 'first_name', 'middle_name', 'last_name', 'role_name', 'assigned_branch', 'role', 'email', 'file_name')
-                                            .from('todos')
-                                            .where('id', managerTo[i].todo_id)
-                                            .first();
-        managerDetails.file_name = blobService.getUrl('images', managerDetails.file_name)
-        manager_to.push(managerDetails); // Include raw manager data if no details found
-      }
-  
-      // Fetch todos who report to this todo (reports_to)
-      const reportsTo = await Database
-        .select('manager_todo_id', 'todo_id')
-        .from('manager_todos')
-        .where('todo_id', todo.id);
-  
-      // Prepare an empty array to store reports data
-      let reports_to = [];
-  
-      // Loop through each manager record and potentially enrich data (e.g., fetch full todo details)
-      for (let i = 0; i < reportsTo.length; i++) {
-        // Assuming `todo_id` in `manager_todos` references the `todos` table
-        let reportsToDetails = await Database.select('id', 'todoname', 'first_name', 'middle_name', 'last_name', 'role_name', 'assigned_branch', 'role', 'email', 'file_name')
-                                            .from('todos')
-                                            .where('id', reportsTo[i].manager_todo_id)
-                                            .first();
-        reportsToDetails.file_name = blobService.getUrl('images', reportsToDetails.file_name)
-        reports_to.push(reportsToDetails); // Include raw manager data if no details found
-      }
-
-      const divisions = await Todo.query()
-      .distinct('assigned_branch')
-      .pluck('assigned_branch', 'assigned_branch');
-
-      const division_options = divisions.map(branch => ({ value: branch, label: branch }));
-
-      const roles = await Todo.query()
-      .distinct('role_name')
-      .pluck('role_name', 'role_name');
-  
-      const role_options = roles.map(role => ({ value: role, label: role }));
-
-      return response.status(200).send({
-        message: 'Todo data successfully fetched!',
-        data: { todo, manager_to, reports_to, division_options, role_options},
-      });
     }
   
     return response.status(500).send({ message: 'Todo not found.' });
@@ -181,21 +126,12 @@ class TodoController {
   async update({ request, params, response, auth }) {
     try {
       const rules = {
-        first_name: 'required',
-        // middle_name: 'nullable',
-        last_name: 'required',
-        email: 'required',
-        role_name: 'required',
-        assigned_branch: 'required',
-        job_description: 'required',
+        todo: 'required',
+        description: 'required'
       };
 
-      const todo = await auth.getTodo();
-      let checkUpdate = [];
-      checkUpdate = await utils.checkPermission(todo, 'update-todo');
-
-      if(checkUpdate.length > 0){
-
+      const user = await auth.getUser();
+      if(user){
         const validation = await validate(request.all(), rules);
 
         if (validation.fails()) {
@@ -203,28 +139,13 @@ class TodoController {
         }
 
         const todo = await Todo.findOrFail(params.id);
-
-        // Update todo attributes directly
-        //   todo.todoname = request.input('todoname');
-        //   todo.email = request.input('email');
-        todo.first_name = request.input('first_name');
-        todo.middle_name = request.input('middle_name');
-        todo.last_name = request.input('last_name');
-        todo.email = request.input('email');
-        todo.role_name = request.input('role_name');
-        todo.assigned_branch = request.input('assigned_branch');
-        todo.job_description = request.input('job_description');
-
-        // Optionally handle password updates (not included in the provided code)
-        // if (request.input('password')) {
-        //   todo.password = await Hash.make(request.input('password'));
-        // }
+        
+        todo.todo = request.input('todo');
+        todo.description = request.input('description');
 
         await todo.save();
 
         return response.status(200).send({ message: 'Todo updated successfully!' });
-      } else {
-        return response.status(500).send({ message: 'No permission for todo update.' });
       }
     } catch (error) {
       console.error(error); // Log the error for debugging
@@ -239,8 +160,9 @@ class TodoController {
         description: 'required',
       };
 
+      const user = await auth.getUser();
 
-      if (auth) {
+      if (user) {
 
         const validation = await validate(request.all(), rules);
 
@@ -271,18 +193,11 @@ class TodoController {
 
     try {
 
-      const todo = await auth.getTodo();
-      let checkDelete = [];
-      checkDelete = await utils.checkPermission(todo, 'delete-todo');
-
-      if (checkDelete.length > 0) {
+      if (auth) {
 
         const { id } = params;
-        const todoDelete = await Todo.find(id);
-
-        todoDelete.is_deleted = 1;
-
-        await todoDelete.save();
+        // delete todo by id
+        await Todo.query().where('id', id).delete();
 
         return response.status(200).send({ message: 'Todo has been deleted' });
       } else {
