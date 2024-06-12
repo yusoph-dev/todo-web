@@ -9,36 +9,27 @@ import loadable from '@loadable/component';
 import ProgressBar from '../components/loader/progressBar';
 import RequireAuth from './requireAuth';
 import Login from '../components/auth/Login';
-import About from '../components/demo-pages/about';
 
 const errorElement = <ErrorPage />;
 const fallbackElement = <ProgressBar />;
 
-const Dashboard = loadable(() => import('../components/dashboard'), {
-  fallback: fallbackElement,
-});
-const Users = loadable(() => import('../components/todos'), {
+const Todos = loadable(() => import('../components/todos/'), {
   fallback: fallbackElement,
 });
 
-const CreateUser = loadable(() => import('../components/todos/create'), {
+const CreateTodo = loadable(() => import('../components/todos/create'), {
   fallback: fallbackElement,
 });
 
 
-const ViewUser = loadable(() => import('../components/todos/view'), {
+const ViewTodo = loadable(() => import('../components/todos/view'), {
   fallback: fallbackElement,
 });
 
-const EditUser = loadable(() => import('../components/todos/edit'), {
+const EditTodo = loadable(() => import('../components/todos/edit'), {
   fallback: fallbackElement,
 });
 
-
-
-const Access = loadable(() => import('../components/access'), {
-  fallback: fallbackElement,
-});
 
 
 export const browserRouter = createBrowserRouter([
@@ -48,7 +39,6 @@ export const browserRouter = createBrowserRouter([
     errorElement: errorElement,
   },
 
-  // auth routes
   {
     element: <AuthLayout />,
     errorElement: errorElement,
@@ -70,24 +60,20 @@ export const browserRouter = createBrowserRouter([
     errorElement: errorElement,
     children: [
       {
-        path: webRoutes.dashboard,
-        element: <Dashboard />,
-      },
-      {
         path: webRoutes.todos,
-        element: <Users />,
+        element: <Todos />,
       },
       {
-        path: webRoutes.create_user,
-        element: <CreateUser />,
+        path: webRoutes.create_todo,
+        element: <CreateTodo />,
       },
       {
-        path: webRoutes.view_user,
-        element: <ViewUser />,
+        path: webRoutes.view_todo,
+        element: <ViewTodo />,
       },
       {
-        path: webRoutes.edit_user,
-        element: <EditUser />,
+        path: webRoutes.edit_todo,
+        element: <EditTodo />,
       },
     ],
   },

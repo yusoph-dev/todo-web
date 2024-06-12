@@ -94,20 +94,17 @@ const Todos = () => {
     setAccess(currentState?.access)
   }, []);
 
-  const showDeleteConfirmation = (user: Todo) => {
+  const showDeleteConfirmation = (todo: Todo) => {
     modal.confirm({
-      title: 'Are you sure to delete this user?',
+      title: 'Are you sure to delete this todo?',
       icon: <ExclamationCircleOutlined />,
       content: (
         <ProDescriptions column={1} title=" ">
-          <ProDescriptions.Item valueType="avatar" label="Avatar">
-            {user.avatar}
+          <ProDescriptions.Item valueType="text" label="Todo">
+            {todo.todo}
           </ProDescriptions.Item>
-          <ProDescriptions.Item valueType="text" label="Name">
-            {user.first_name} {user.last_name}
-          </ProDescriptions.Item>
-          <ProDescriptions.Item valueType="text" label="Email">
-            {user.email}
+          <ProDescriptions.Item valueType="text" label="Description">
+            {todo.description}
           </ProDescriptions.Item>
         </ProDescriptions>
       ),
@@ -116,12 +113,12 @@ const Todos = () => {
       },
       onOk: () => {
         return http
-          .delete(`${apiRoutes.users}/${user.id}`)
+          .delete(`${apiRoutes.todos}/${todo.id}`)
           .then(() => {
             showNotification(
               'Success',
               NotificationType.SUCCESS,
-              'User is deleted.'
+              'Todo is deleted.'
             );
 
             actionRef.current?.reloadAndRest?.();
@@ -141,7 +138,7 @@ const Todos = () => {
   return (
     <BasePageContainer breadcrumb={breadcrumb}>
       <div>
-        <Link to={webRoutes.create_user} style={{float: 'right'}}>
+        <Link to={webRoutes.create_todo} style={{float: 'right'}}>
           <Button>Create Todo</Button>
         </Link>
       </div>
@@ -173,10 +170,10 @@ const Todos = () => {
               },
             })
             .then((response) => {
-              const users: [Todo] = response.data.data;
+              const todos: [Todo] = response.data.data;
 
               return {
-                data: users,
+                data: todos,
                 success: true,
                 total: response.data.total,
               } as RequestData<Todo>;

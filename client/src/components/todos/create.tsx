@@ -12,7 +12,7 @@ import { Typography } from 'antd';
 const { Text, Title } = Typography;
 import React, { useRef, useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { User } from '../../interfaces/models/user';
+import { Todo } from '../../interfaces/models/todo';
 import { apiRoutes } from '../../routes/api';
 import { webRoutes } from '../../routes/web';
 import {
