@@ -37,7 +37,7 @@ class TodoController {
       const offset = (page - 1) * per_page;
   
       let query = Database
-        .select('id', 'todo', 'description')
+        .select('id', 'todo', 'description', 'completed_date')
         .from('todos');
   
       // Add search condition if search parameter is provided
@@ -208,6 +208,39 @@ class TodoController {
       return response.status(500).send({ message: 'An error occurred during delete.' });
     }
   }
+
+  async setCompletedDate({ request, response, params, auth }) {
+    // set timestamp for completed_date
+    try {
+      const user = await auth.getUser();
+      if (user) {
+        const todo = await Todo.findOrFail(params.id);
+        todo.completed_date = todo.completed_date ? null : new Date();
+        await todo.save();
+        return response.status(200).send({ message: 'Todo completed date has set the status to ' +( todo.completed_date ? 'Complete' : 'Incomplete' )+' successfully'});
+      }
+    } catch (error) {
+      console.error(error); // Log the error for debugging
+      return response.status(500).send({ message: 'An error occurred during set completion.' });
+    }
+  }
+
+  async setCompletedDateToNull({ request, response, params, auth }) {
+    // set timestamp for completed_date
+    try {
+      const user = await auth.getUser();
+      if (user) {
+        const todo = await Todo.findOrFail(params.id);
+        todo.completed_date = null;
+        await todo.save();
+        return response.status(200).send({ message: 'Todo completed date set to null successfully!' });
+      }
+    } catch (error) {
+      console.error(error); // Log the error for debugging
+      return response.status(500).send({ message: 'An error occurred during set completed date to null.' });
+    }
+  }
+
 }
 
 module.exports = TodoController

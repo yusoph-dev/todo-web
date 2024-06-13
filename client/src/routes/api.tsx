@@ -1,3 +1,4 @@
+import { set } from 'nprogress';
 import { API_URL } from '../utils';
 
 export const apiRoutes = {
@@ -9,4 +10,5 @@ export const apiRoutes = {
   update_todo: `${API_URL}/todo/update/`,
   update_todo_active: `${API_URL}/todo/update-active/`,
   delete_todo: `${API_URL}/todo/delete/`,
+  set_todo: `${API_URL}/todo/set/`,
 };

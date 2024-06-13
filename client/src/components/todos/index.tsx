@@ -28,6 +28,8 @@ import LazyImage from '../lazy-image';
 import Icon, {
   ExclamationCircleOutlined,
   DeleteOutlined,
+  CheckOutlined,
+  CloseOutlined
 } from '@ant-design/icons';
 
 
@@ -59,6 +61,19 @@ const Todos = () => {
 
   const columns: ProColumns[] = [
     {
+      title: 'Status',
+      dataIndex: 'completed_date',
+      sorter: true,
+      align: 'center',
+      render: (_, row: Todo) => {
+        return row.completed_date ? (
+          <CheckOutlined style={{ color: 'green' }} />
+        ) : (
+          <CloseOutlined style={{ color: 'red' }} />
+        );
+      }
+    },
+    {
       title: 'Name',
       dataIndex: 'todo',
       sorter: true,
@@ -82,9 +97,17 @@ const Todos = () => {
           <Link to={'/todos-management/todos/edit/'+row.id} style={{marginLeft: '10px'}}>
               <button>Edit</button>
           </Link>  
-          <Link to={'/todos-management/todos/view/'+row.id} style={{marginLeft: '10px'}}>
-            <button > View</button>
-          </Link>  
+          <button onClick={() => {
+            handleDeleteTodo(row.id);
+          }} style={{marginLeft: '10px'}}>
+            Delete
+          </button>
+          {/* Mark as complete */}
+          <button onClick={() => {
+            handleComplete(row.id);
+          }} style={{marginLeft: '10px'}}>
+            Mark as {row.completed_date ? 'Incomplete' : 'Complete'}
+          </button>
         </>
       ],
     },
@@ -94,39 +117,32 @@ const Todos = () => {
     setAccess(currentState?.access)
   }, []);
 
-  const showDeleteConfirmation = (todo: Todo) => {
-    modal.confirm({
-      title: 'Are you sure to delete this todo?',
-      icon: <ExclamationCircleOutlined />,
+  const handleDeleteTodo = (todo_id:number) => {
+    Modal.confirm({
+      title: 'Are you sure you want to delete this todo?',
+      className: 'deleteModal',
       content: (
-        <ProDescriptions column={1} title=" ">
-          <ProDescriptions.Item valueType="text" label="Todo">
-            {todo.todo}
-          </ProDescriptions.Item>
-          <ProDescriptions.Item valueType="text" label="Description">
-            {todo.description}
-          </ProDescriptions.Item>
-        </ProDescriptions>
+        <p>
+          This action cannot be undone. Deleting the todo will remove all their
+          associated data.
+        </p>
       ),
-      okButtonProps: {
-        className: 'bg-primary',
-      },
-      onOk: () => {
+      onOk: async () => {
         return http
-          .delete(`${apiRoutes.todos}/${todo.id}`)
+          .delete(`${apiRoutes.todo}${todo_id}`)
           .then(() => {
             showNotification(
               'Success',
               NotificationType.SUCCESS,
               'Todo is deleted.'
             );
-
-            actionRef.current?.reloadAndRest?.();
+            actionRef.current?.reload();  
           })
           .catch((error) => {
             handleErrorResponse(error);
           });
       },
+      onCancel() { },
     });
   };
 
@@ -134,6 +150,22 @@ const Todos = () => {
     setSearchText(value);
     actionRef.current?.reload();
   };
+
+  const handleComplete = (todo_id:number) => {
+    return http
+      .put(`${apiRoutes.set_todo}${todo_id}`)
+      .then((res) => {
+        showNotification(
+          'Success',
+          NotificationType.SUCCESS,
+          res.data.message
+        );
+        actionRef.current?.reload();  
+      })
+      .catch((error) => {
+        handleErrorResponse(error);
+      });
+  }
 
   return (
     <BasePageContainer breadcrumb={breadcrumb}>

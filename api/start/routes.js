@@ -24,6 +24,7 @@ Route.group(() => {
   Route.put('todo/update/:id', 'TodoController.update')
   Route.post('todo/create', 'TodoController.create')
   Route.delete('todo/:id', 'TodoController.delete')
+  Route.put('todo/set/:id', 'TodoController.setCompletedDate')
   
 }).middleware(['auth', 'checkUserRole:admin,hr']).prefix('v1') // Here, checkUserRole should be able to handle checking multiple roles
 

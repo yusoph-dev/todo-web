@@ -39,7 +39,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { FiUsers } from 'react-icons/fi';
 import { CiCircleMore } from 'react-icons/ci';
 import { CloudUploadOutlined, AntDesignOutlined, UserOutlined } from '@ant-design/icons';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import { Todo } from '../../interfaces/models/todo';
 import { apiRoutes } from '../../routes/api';
 import { webRoutes } from '../../routes/web';
@@ -117,7 +117,6 @@ const EditTodo = () => {
       });
   };
 
-
   const handleSubmit = (values: any) => {
     
     return http
@@ -125,6 +124,9 @@ const EditTodo = () => {
       .then((response) => {
         
         message.success(response.data.message);
+        // click on the link to view the todos list
+
+        
       })
       .catch((error) => {
         handleErrorResponse(error);
@@ -196,7 +198,7 @@ const EditTodo = () => {
                       <Input.TextArea/>
                     </Form.Item>
 
-                      <Button className="primary-btn primary" htmlType="submit" style={{float: 'right'}} >Update</Button>
+                    <Button className="primary-btn primary" htmlType="submit" style={{float: 'right'}} >Update</Button>
 
                   </Form>
             ) : (
