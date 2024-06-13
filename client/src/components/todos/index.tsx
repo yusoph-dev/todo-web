@@ -95,19 +95,19 @@ const Todos = () => {
       render: (_, row: Todo) => [
         <>
           <Link to={'/todos-management/todos/edit/'+row.id} style={{marginLeft: '10px'}}>
-              <button>Edit</button>
+            <Button >Edit</Button>
           </Link>  
-          <button onClick={() => {
+          <Button type="primary" onClick={() => {
             handleDeleteTodo(row.id);
-          }} style={{marginLeft: '10px'}}>
+          }} style={{marginLeft: '10px'}} danger>
             Delete
-          </button>
+          </Button>
           {/* Mark as complete */}
-          <button onClick={() => {
+          <Button onClick={() => {
             handleComplete(row.id);
-          }} style={{marginLeft: '10px'}}>
+          }} style={{ marginLeft: '10px', marginTop: '10px'}}>
             Mark as {row.completed_date ? 'Incomplete' : 'Complete'}
-          </button>
+          </Button>
         </>
       ],
     },
