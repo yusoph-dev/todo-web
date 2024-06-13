@@ -39,7 +39,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { FiUsers } from 'react-icons/fi';
 import { CiCircleMore } from 'react-icons/ci';
 import { CloudUploadOutlined, AntDesignOutlined, UserOutlined } from '@ant-design/icons';
-import { Link, useParams, useHistory } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Todo } from '../../interfaces/models/todo';
 import { apiRoutes } from '../../routes/api';
 import { webRoutes } from '../../routes/web';
