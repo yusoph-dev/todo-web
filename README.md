@@ -1,6 +1,6 @@
 # Todo Web
 
-Todo Web is a full-stack web application built with ReactJS for the frontend and AdonisJS for the backend. This project showcases a modern web application architecture, utilizing ReactJS with Ant Design for a responsive and user-friendly interface, and AdonisJS with MySQL for a robust backend.
+Todo Web is a full-stack web application built with ReactJS for the frontend and AdonisJS for the backend. This project showcases a modern web application architecture, utilizing ReactJS with Ant Design for a responsive and user-friendly interface, and AdonisJS with PostgreSql/MySQL for a robust backend.
 
 <!-- display recording gif here on folder ./recording/todo.gif -->
 ![Recording](./recording/todo.gif)
