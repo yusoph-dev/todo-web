@@ -118,7 +118,7 @@ const CreateTodo = () => {
                     <Form.Item
                       label="Todo"
                       name="todo"
-                      rules={[{ required: true, message: 'Please input your first name' }]}
+                      rules={[{ required: true, message: 'Please input your todo' }]}
                     >
                       <Input />
                     </Form.Item>
@@ -126,7 +126,7 @@ const CreateTodo = () => {
                     <Form.Item
                       label="Description"
                       name="description"
-                      rules={[{ required: true, message: 'Please input!' }]}
+                      rules={[{ required: true, message: 'Please insert description' }]}
                     >
                       <Input.TextArea/>
                     </Form.Item>

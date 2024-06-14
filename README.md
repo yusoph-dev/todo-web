@@ -2,10 +2,13 @@
 
 Todo Web is a full-stack web application built with ReactJS for the frontend and AdonisJS for the backend. This project showcases a modern web application architecture, utilizing ReactJS with Ant Design for a responsive and user-friendly interface, and AdonisJS with MySQL for a robust backend.
 
+<!-- display recording gif here on folder ./recording/todo.gif -->
+![Recording](./recording/todo.gif)
+
 ## Table of Contents
 -   [Installation](doc:linking-to-pages#installation)
 -   [Client Setup](doc:linking-to-pages#client-setup)
--   [Todo_api  Setup](doc:linking-to-pages#Todo_api-setup)
+-   [Api Setup](doc:linking-to-pages#Api-setup)
 -   [Running the Application](doc:linking-to-pages#running-the-application)
 
 ## Installation
@@ -34,16 +37,16 @@ VITE_DEMO_MODE=true
 
 This variable enables demo mode in the application.
 
-### Todo_api Setup
+### Api Setup
 
-The `Todo-api` folder contains the backend of the application, developed using AdonisJS framework with MySQL as the database.
+The `api` folder contains the backend of the application, developed using AdonisJS framework with MySQL as the database.
 
 To set up the backend, follow these steps:
 
-1.  Navigate to the  `Todo-api`  directory:
+1.  Navigate to the  `api`  directory:
 
 ```
-cd Todo-api
+cd api
 ```
 
 2.  Install the project dependencies:
@@ -64,7 +67,7 @@ npm install
 yarn install
 ```
 
-5.  Create a  `.env`  file in the root of the  `Todo-api`  directory. You can copy the  `.env.example`  file as a starting point:
+5.  Create a  `.env`  file in the root of the  `api`  directory. You can copy the  `.env.example`  file as a starting point:
 
 ```
 cp .env.example .env
@@ -75,6 +78,7 @@ cp .env.example .env
 ```
 adonis migration:run
 ```
+
 
 7.  Run the database seeders:
 
@@ -92,7 +96,7 @@ Ensure that the `.env` file exists before running this command.
 
 ## Running Locally
 
-Create a Databse for Todo_api
+Create a Database for Todo
 
 1. Open Terminal and log in to MySQL as root:
 
@@ -103,7 +107,7 @@ mysql -u root -p
 2. Create a new database:
 
 ```
-CREATE DATABASE Todo_api;
+CREATE DATABASE todo;
 ```
 
 3. Exit MySQL:
@@ -136,12 +140,12 @@ Alternatively, you can use Yarn if you prefer:
 yarn run dev
 ```
 
-### Running the Todo_api Backend
+### Running the API Backend
 
 1.  Navigate to the  `Client`  directory:
 
 ```
-cd Todo-api
+cd api
 ```
 
 2.  Start the development server:
@@ -156,4 +160,4 @@ Alternatively, you can use Yarn if you prefer:
 yarn run start
 ```
 
-That's it! You're now ready to use Todo Web. If you encounter any issues during setup or have any questions, feel free to reach out to us. Enjoy using Todo Web!
+That's it! You're now ready to use Todo. If you encounter any issues during setup or have any questions, feel free to reach out to us. Enjoy using Todo Web!

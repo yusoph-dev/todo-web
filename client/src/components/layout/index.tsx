@@ -12,6 +12,8 @@ import { apiRoutes } from '../../routes/api';
 import http from '../../utils/http';
 import { handleErrorResponse } from '../../utils';
 import { RiShieldUserFill } from 'react-icons/ri';
+import { AiOutlineUser } from "react-icons/ai";
+
 
 const Layout = () => {
   const location = useLocation();
@@ -73,7 +75,7 @@ const Layout = () => {
           </a>
         )}
         avatarProps={{
-          icon: <img src={currentState?.file_name} alt="Logo" style={{ height: '50px' }} />,
+          icon: <AiOutlineUser style={{ height: '50px' }} />,
           className: 'bg-primary bg-opacity-20 text-primary text-opacity-90',
           size: 'small',
           shape: 'square',
